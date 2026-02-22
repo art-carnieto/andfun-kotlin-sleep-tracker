@@ -16,8 +16,6 @@
 
 package com.example.android.trackmysleepquality
 
-// TODO (08) Optional: Add tests to exercise the other DAO methods.
-
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -25,8 +23,8 @@ import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -70,5 +68,76 @@ class SleepDatabaseTest {
         val tonight = sleepDao.getTonight()
         assertEquals(tonight?.sleepQuality, -1)
     }
+
+    @Test
+    fun insertAndGetSleepQuality() = runTest {
+        val night = SleepNight(123123, 124124551, 123123123, 5)
+        sleepDao.insert(night)
+        val nightTest = sleepDao.get(123123)
+        assertEquals(nightTest?.sleepQuality, 5)
+    }
+
+    @Test
+    fun insertUpdateAndGetValues() = runTest {
+        val night = SleepNight(2222, 124124551, 123123123, 3)
+        sleepDao.insert(night)
+
+        night.endTimeMilli = 8888888
+        night.sleepQuality = 9
+        sleepDao.update(night)
+
+        val nightTest = sleepDao.get(2222)
+        assertEquals(nightTest?.endTimeMilli, 8888888.toLong())
+        assertEquals(nightTest?.sleepQuality, 9)
+    }
+
+// FIXME: issue is happening because LiveData will wait for an observer to observe it
+// before populating its value. To fix this, a more complex test must be written
+//
+//    private val mMediatorLiveData: MediatorLiveData<List<SleepNight>> = MediatorLiveData()
+//
+//    @Test
+//    fun insert5NightsAndListThem() {
+//        val night = SleepNight(0,12314124,214214124,2)
+//        val night2 = SleepNight(0,14242144124,21111114124,7)
+//        val night3 = SleepNight(0,12314444444,21422242124,1)
+//        val night4 = SleepNight(0,1231415555554,214266666124,6)
+//        val night5 = SleepNight(0,123166666664,2142141777774,4)
+//
+//        val listNights = sleepDao.getAllNights()
+//
+//        runTest {
+//            sleepDao.insert(night)
+//            sleepDao.insert(night2)
+//            sleepDao.insert(night3)
+//            sleepDao.insert(night4)
+//            sleepDao.insert(night5)
+//        }
+//
+//        Log.d("Testing", "night=${night}")
+//        Log.d("Testing", "night2=${night2}")
+//        Log.d("Testing", "night3=${night3}")
+//        Log.d("Testing", "night4=${night4}")
+//        Log.d("Testing", "night5=${night5}")
+//
+//        mMediatorLiveData.addSource(listNights) {
+//            fun onChanged(sleepList: List<SleepNight>?) {
+//                if (sleepList.isNullOrEmpty()) {
+//                    // Fetch data from API
+//                } else {
+//                    mMediatorLiveData.removeSource(listNights as LiveData<*>)
+//                    mMediatorLiveData.setValue(sleepList)
+//                }
+//            }
+//        }
+//
+//        Log.d("Testing", "listNights.value=${listNights.value}")
+//
+//        assertEquals(listNights.value?.size, 5)
+//
+////        val listNights = sleepDao.getAllNights().value?.size
+////        assertEquals(listNights, 5)
+//    }
+
 }
 
