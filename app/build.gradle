@@ -31,6 +31,8 @@ android {
         versionName "1.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        // from https://developer.android.com/training/testing/instrumented-tests:
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -84,7 +86,11 @@ dependencies {
 
 
     // Testing
-    testImplementation 'junit:junit:4.13.2'
+    // from https://developer.android.com/training/testing/instrumented-tests:
+    androidTestImplementation 'junit:junit:4.13.2'
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_coroutine"
+    androidTestImplementation "androidx.test:runner:$androidXTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidXTestVersion"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

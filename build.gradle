@@ -28,6 +28,7 @@ buildscript {
         version_lifecycle = '2.8.2'
         version_navigation = '2.7.7'
         version_room = '2.6.1'
+        androidXTestVersion = '1.7.0'
     }
 
     repositories {
