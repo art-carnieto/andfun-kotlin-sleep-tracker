@@ -45,10 +45,15 @@ class SleepTrackerViewModel(
         formatNights(nights, application.resources)
     }
 
-    //TODO (02)  Create three corresponding state variables. Assign them a Transformations
-    //that tests it against the value of tonight.
-
-    //TODO (03) Verify app build and runs without errors.
+    val startButtonVisible = tonight.map {
+        null == it
+    }
+    val stopButtonVisible = tonight.map {
+        null != it
+    }
+    val clearButtonVisible = nights.map {
+        it.isNotEmpty()
+    }
 
     //TODO (04) Using the familiar pattern, create encapsulated showSnackBarEvent variable
     //and doneShowingSnackbar() fuction.
