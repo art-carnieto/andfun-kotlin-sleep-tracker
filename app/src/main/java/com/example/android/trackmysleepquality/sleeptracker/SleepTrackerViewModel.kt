@@ -55,10 +55,14 @@ class SleepTrackerViewModel(
         it.isNotEmpty()
     }
 
-    //TODO (04) Using the familiar pattern, create encapsulated showSnackBarEvent variable
-    //and doneShowingSnackbar() fuction.
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
 
-    //TODO (06) In onClear(), set the value of _showOnSnackbarEvent to true.
+    val showSnackBarEvent: LiveData<Boolean>
+        get() = _showSnackbarEvent
+
+    fun doneShowingSnackbar() {
+        _showSnackbarEvent.value = false
+    }
 
     /**
      * Variable that tells the Fragment to navigate to a specific [SleepQualityFragment]
@@ -110,15 +114,16 @@ class SleepTrackerViewModel(
 
 
     private suspend fun clear() {
-            database.clear() 
+        database.clear()
+        _showSnackbarEvent.value = true
     }
 
     private suspend fun update(night: SleepNight) {
-            database.update(night)
+        database.update(night)
     }
 
     private suspend fun insert(night: SleepNight) {
-            database.insert(night)
+        database.insert(night)
     }
 
     /**
